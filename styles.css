@@ -1,13 +1,24 @@
 :root {
-    --primary-color: #FF89B4;  /* Softer Pink */
-    --success-color: #89E4FF;  /* Light Blue */
-    --next-color: #C89FFF;     /* Soft Purple */
+    --primary-color: #FF6BC2;  /* Brighter Pink */
+    --success-color: #5FE3FF;  /* Vivid Light Blue */
+    --next-color: #B57AFF;     /* Brighter Purple */
     --background-color: #F8F0FF; /* Very Light Purple */
     --surface-color: #ffffff;
-    --text-color: #936C9E;     /* Muted Purple */
-    --border-color: #FFE5F1;   /* Light Pink */
-    --hover-color: #FF6B9F;    /* Brighter Pink */
+    --text-color: #8B4B9F;     /* Deeper Purple */
+    --border-color: #FFD6EC;   /* Light Pink */
+    --hover-color: #FF4BA5;    /* Brighter Pink */
     --transition-speed: 0.3s;
+}
+
+/* Cloud Animation */
+@keyframes float-clouds {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(10px, -10px); }
+}
+
+@keyframes float-clouds-reverse {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -5px); }
 }
 
 body {
@@ -22,6 +33,69 @@ body {
     margin: 0;
     padding: 2rem;
     color: var(--text-color);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Cloud Elements */
+.cloud-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.cloud {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.8) 20%,
+        rgba(255, 255, 255, 0) 70%
+    );
+    border-radius: 50%;
+}
+
+.cloud:nth-child(1) {
+    top: -100px;
+    left: -100px;
+    animation: float-clouds 15s ease-in-out infinite;
+}
+
+.cloud:nth-child(2) {
+    bottom: -100px;
+    right: -100px;
+    animation: float-clouds-reverse 12s ease-in-out infinite;
+}
+
+.cloud:nth-child(3) {
+    top: 20%;
+    left: 10%;
+    width: 200px;
+    height: 200px;
+    animation: float-clouds 18s ease-in-out infinite;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.6) 30%,
+        rgba(255, 255, 255, 0) 70%
+    );
+}
+
+.cloud:nth-child(4) {
+    bottom: 30%;
+    right: 15%;
+    width: 200px;
+    height: 200px;
+    animation: float-clouds-reverse 20s ease-in-out infinite;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.6) 30%,
+        rgba(255, 255, 255, 0) 70%
+    );
 }
 
 .container {
@@ -122,11 +196,22 @@ body {
     border-top: 2px dashed var(--border-color);
 }
 
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
 .team-header h2 {
     font-size: 2rem;
     color: var(--text-color);
     margin: 0;
     font-weight: normal;
+}
+
+#shuffleBtn {
+    margin-left: auto;
 }
 
 button {
@@ -155,7 +240,7 @@ button:active {
 }
 
 .remove-member {
-    background: #ff8aa4;
+    background: var(--hover-color);
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
 }
