@@ -29,6 +29,7 @@ class TimerCore {
         // Setup
         this.setupEventListeners();
         this.loadFromURL();
+        this.hideSwitchModal(); // Hide modal on init
     }
 
     playGentleBeep() {
@@ -38,11 +39,9 @@ class TimerCore {
         oscillator.connect(gainNode);
         gainNode.connect(this.audioContext.destination);
         
-        // Use sine wave for softer sound
         oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime); // A4 note
+        oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
         
-        // Gradual volume changes
         gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.1, this.audioContext.currentTime + 0.1);
         gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 1);
