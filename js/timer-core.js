@@ -23,9 +23,32 @@ class TimerCore {
         this.rotationCount = 0;
         this.teamManager = null;
 
+        // Create oscillator for sound
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
         // Setup
         this.setupEventListeners();
         this.loadFromURL();
+    }
+
+    playGentleBeep() {
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.audioContext.destination);
+        
+        // Use sine wave for softer sound
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime); // A4 note
+        
+        // Gradual volume changes
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, this.audioContext.currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 1);
+        
+        oscillator.start();
+        oscillator.stop(this.audioContext.currentTime + 1);
     }
 
     setTeamManager(teamManager) {
@@ -38,16 +61,13 @@ class TimerCore {
         this.rotationTimeInput.addEventListener('change', () => this.updateRotationTime());
         this.breakFrequencyInput.addEventListener('change', () => this.updateBreakFrequency());
         this.continueBtn.addEventListener('click', () => this.handleDriverSwitch());
-        
-        // Play sound when timer hits 0
-        this.timeUpSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodHQrGc3MWy0/NyMZjUvfdpMP5JjL7DxTRZuYDO61EwQZ2A2tdBKFGpgNrbQSxNvYDa20EsTc2A3ttBLE3RgOLfRTBN0YDi30UwT');
     }
 
     showSwitchModal(currentDriver, nextDriver) {
         this.modalCurrentDriver.textContent = currentDriver;
         this.modalNextDriver.textContent = nextDriver;
         this.switchModal.style.display = 'flex';
-        this.timeUpSound.play().catch(e => console.log('Audio play failed:', e));
+        this.playGentleBeep();
     }
 
     hideSwitchModal() {
