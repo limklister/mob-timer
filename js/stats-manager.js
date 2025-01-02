@@ -144,7 +144,7 @@ class StatsManager {
         xLabel.setAttribute('x', width / 2);
         xLabel.setAttribute('y', height - 10);
         xLabel.setAttribute('text-anchor', 'middle');
-        xLabel.textContent = 'Flow';
+        xLabel.textContent = 'Time';
 
         const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         yLabel.setAttribute('x', 20);
@@ -153,31 +153,108 @@ class StatsManager {
         yLabel.setAttribute('transform', `rotate(-90, 20, ${height / 2})`);
         yLabel.textContent = 'Energy';
 
-        // Plot points
-        validStats.forEach((stat, index) => {
+        // Calculate time range for x-axis
+        const timestamps = validStats.map(stat => new Date(stat.timestamp));
+        const minTime = Math.min(...timestamps);
+        const maxTime = Math.max(...timestamps);
+        const timeRange = maxTime - minTime;
+
+        // Helper function to get x coordinate from timestamp
+        const getTimeX = (timestamp) => {
+            const timeOffset = new Date(timestamp) - minTime;
+            return padding + (width - 2 * padding) * (timeOffset / timeRange);
+        };
+
+        // Create polylines for flow and energy
+        const createPolyline = (values, color) => {
+            const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            const points = validStats.map((stat, i) => {
+                const x = getTimeX(stat.timestamp);
+                const y = height - (padding + (height - 2 * padding) * values[i]);
+                return `${x},${y}`;
+            }).join(' ');
+            
+            polyline.setAttribute('points', points);
+            polyline.setAttribute('fill', 'none');
+            polyline.setAttribute('stroke', color);
+            polyline.setAttribute('stroke-width', '2');
+            
+            return polyline;
+        };
+
+        // Add energy line
+        const energyLine = createPolyline(
+            validStats.map(stat => stat.energy),
+            '#4444FF'
+        );
+        svg.appendChild(energyLine);
+
+        // Add flow line
+        const flowLine = createPolyline(
+            validStats.map(stat => stat.flow),
+            '#44FF44'
+        );
+        svg.appendChild(flowLine);
+
+        // Add dots for each data point
+        validStats.forEach((stat) => {
             try {
-                const point = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                const x = padding + (width - 2 * padding) * stat.flow;
-                const y = height - (padding + (height - 2 * padding) * stat.energy);
+                // Energy point
+                const energyPoint = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const energyX = getTimeX(stat.timestamp);
+                const energyY = height - (padding + (height - 2 * padding) * stat.energy);
                 
-                if (isNaN(x) || isNaN(y)) {
-                    console.error('Invalid coordinates for stat:', stat);
-                    return;
-                }
+                energyPoint.setAttribute('cx', energyX);
+                energyPoint.setAttribute('cy', energyY);
+                energyPoint.setAttribute('r', '3');
+                energyPoint.setAttribute('fill', '#4444FF');
                 
-                point.setAttribute('cx', x);
-                point.setAttribute('cy', y);
-                point.setAttribute('r', '5');
+                svg.appendChild(energyPoint);
+
+                // Flow point
+                const flowPoint = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const flowY = height - (padding + (height - 2 * padding) * stat.flow);
                 
-                // Color based on time (more recent = darker)
-                const opacity = (index + 1) / validStats.length;
-                point.setAttribute('fill', `rgba(0, 0, 255, ${opacity})`);
+                flowPoint.setAttribute('cx', energyX);
+                flowPoint.setAttribute('cy', flowY);
+                flowPoint.setAttribute('r', '3');
+                flowPoint.setAttribute('fill', '#44FF44');
                 
-                svg.appendChild(point);
+                svg.appendChild(flowPoint);
             } catch (error) {
                 console.error('Error plotting point:', error, stat);
             }
         });
+
+        // Add legend
+        const legend = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const legendItems = [
+            { color: '#4444FF', label: 'Energy' },
+            { color: '#44FF44', label: 'Flow' }
+        ];
+
+        legendItems.forEach((item, i) => {
+            const y = padding + i * 20;
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', width - padding - 60);
+            line.setAttribute('y1', y);
+            line.setAttribute('x2', width - padding - 40);
+            line.setAttribute('y2', y);
+            line.setAttribute('stroke', item.color);
+            line.setAttribute('stroke-width', '2');
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', width - padding - 35);
+            text.setAttribute('y', y + 4);
+            text.setAttribute('font-size', '12');
+            text.textContent = item.label;
+            
+            legend.appendChild(line);
+            legend.appendChild(text);
+        });
+        
+        svg.appendChild(legend);
 
         svg.appendChild(xAxis);
         svg.appendChild(yAxis);
