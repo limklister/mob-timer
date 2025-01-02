@@ -1,111 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mob Timer</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/timer.css">
-    <link rel="stylesheet" href="css/drivers.css">
-    <link rel="stylesheet" href="css/team.css">
-    <link rel="stylesheet" href="css/settings.css">
-    <link rel="stylesheet" href="css/modals.css">
-    <link rel="stylesheet" href="css/responsive.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/timer.css" />
+    <link rel="stylesheet" href="css/drivers.css" />
+    <link rel="stylesheet" href="css/team.css" />
+    <link rel="stylesheet" href="css/settings.css" />
+    <link rel="stylesheet" href="css/modals.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
     <div class="cloud-container">
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
     </div>
-    
+
     <!-- Driver Switch Modal -->
     <div id="switchModal" class="modal">
-        <div class="modal-content">
-            <h2>Time's Up!</h2>
-            <div class="driver-switch-info">
-                <div class="switch-driver current">
-                    <div class="driver-label">Current Driver</div>
-                    <div id="modalCurrentDriver"></div>
-                </div>
-                <div class="switch-arrow">→</div>
-                <div class="switch-driver next">
-                    <div class="driver-label">Next Driver</div>
-                    <div id="modalNextDriver"></div>
-                </div>
-            </div>
-            <button id="continueBtn">Continue</button>
+      <div class="modal-content">
+        <h2>Time's Up!</h2>
+        <div class="driver-switch-info">
+          <div class="switch-driver current">
+            <div class="driver-label">Current Driver</div>
+            <div id="modalCurrentDriver"></div>
+          </div>
+          <div class="switch-arrow">→</div>
+          <div class="switch-driver next">
+            <div class="driver-label">Next Driver</div>
+            <div id="modalNextDriver"></div>
+          </div>
         </div>
+        <button id="continueBtn">Continue</button>
+      </div>
     </div>
 
     <!-- Stats Modal -->
     <div id="statsModal" class="modal">
-        <div class="modal-content">
-            <h2>Before switching...</h2>
-            <div class="stats-input-area">
-                <div class="coordinate-input" id="coordInput">
-                    <div class="y-axis-label">High Energy</div>
-                    <div class="input-grid">
-                        <div class="x-axis-label">Stuck</div>
-                        <div class="click-area" id="clickArea"></div>
-                        <div class="x-axis-label">Flow</div>
-                    </div>
-                    <div class="y-axis-label">Low Energy</div>
-                </div>
+      <div class="modal-content">
+        <h2>Before switching...</h2>
+        <div class="stats-input-area">
+          <div class="coordinate-input" id="coordInput">
+            <div class="y-axis-label">High Energy</div>
+            <div class="input-grid">
+              <div class="x-axis-label">Stuck</div>
+              <div class="click-area" id="clickArea">
                 <div id="clickMarker" class="click-marker"></div>
-                <div class="input-point-label">
-                    Click where you feel on the grid
-                </div>
+              </div>
+              <div class="x-axis-label">Flow</div>
             </div>
+            <div class="y-axis-label">Low Energy</div>
+          </div>
+
+          <div class="input-point-label">Click where you feel on the grid</div>
         </div>
+      </div>
     </div>
 
     <div class="container">
-        <div class="timer-section">
-            <div id="timer">25:00</div>
-            <div class="driver-display">
-                <div class="driver-card hidden"></div>
-                <div class="driver-card current">
-                    <div class="driver-label">Current Driver</div>
-                    <div class="driver-name" id="currentDriverDisplay">No driver selected</div>
-                </div>
-                <div class="driver-card next">
-                    <div class="driver-label">Up Next</div>
-                    <div class="driver-name" id="nextDriverDisplay">No driver selected</div>
-                </div>
+      <div class="timer-section">
+        <div id="timer">25:00</div>
+        <div class="driver-display">
+          <div class="driver-card hidden"></div>
+          <div class="driver-card current">
+            <div class="driver-label">Current Driver</div>
+            <div class="driver-name" id="currentDriverDisplay">
+              No driver selected
             </div>
-            <div class="timer-controls">
-                <button id="startPauseBtn">Start</button>
-                <button id="resetBtn">Reset</button>
-                <button id="showStatsBtn">Show Stats</button>
+          </div>
+          <div class="driver-card next">
+            <div class="driver-label">Up Next</div>
+            <div class="driver-name" id="nextDriverDisplay">
+              No driver selected
             </div>
+          </div>
         </div>
+        <div class="timer-controls">
+          <button id="startPauseBtn">Start</button>
+          <button id="resetBtn">Reset</button>
+          <button id="showStatsBtn">Show Stats</button>
+        </div>
+      </div>
 
-        <div class="team-section">
-            <div class="team-header">
-                <h2>Team Members</h2>
-                <button id="shuffleBtn">🔀 Shuffle</button>
-            </div>
-            <div id="teamList" class="draggable-list"></div>
-            <div class="add-member">
-                <input type="text" id="memberInput" placeholder="Enter member name">
-                <button id="addMemberBtn">Add Member</button>
-            </div>
+      <div class="team-section">
+        <div class="team-header">
+          <h2>Team Members</h2>
+          <button id="shuffleBtn">🔀 Shuffle</button>
         </div>
+        <div id="teamList" class="draggable-list"></div>
+        <div class="add-member">
+          <input type="text" id="memberInput" placeholder="Enter member name" />
+          <button id="addMemberBtn">Add Member</button>
+        </div>
+      </div>
 
-        <div class="settings-section">
-            <h2>Settings</h2>
-            <div class="setting">
-                <label for="rotationTime">Rotation Time (minutes)</label>
-                <input type="number" id="rotationTime" value="5" min="1" max="60">
-            </div>
-            <div class="setting">
-                <label for="breakFrequency">Break Frequency (rotations)</label>
-                <input type="number" id="breakFrequency" value="4" min="1" max="10">
-            </div>
+      <div class="settings-section">
+        <h2>Settings</h2>
+        <div class="setting">
+          <label for="rotationTime">Rotation Time (minutes)</label>
+          <input type="number" id="rotationTime" value="5" min="1" max="60" />
         </div>
+        <div class="setting">
+          <label for="breakFrequency">Break Frequency (rotations)</label>
+          <input type="number" id="breakFrequency" value="4" min="1" max="10" />
+        </div>
+      </div>
     </div>
 
     <!-- Load scripts in correct order -->
@@ -115,5 +119,5 @@
     <script src="js/team-manager.js"></script>
     <script src="js/timer-core.js"></script>
     <script src="js/app-init.js"></script>
-</body>
+  </body>
 </html>
