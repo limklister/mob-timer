@@ -1,22 +1,23 @@
 :root {
-    --primary-color: #FF6BC2;  /* Brighter Pink */
-    --success-color: #5FE3FF;  /* Vivid Light Blue */
-    --next-color: #B57AFF;     /* Brighter Purple */
-    --background-color: #F8F0FF; /* Very Light Purple */
+    --primary-color: #FF8B7E;  /* Warm Coral */
+    --success-color: #FFB174;  /* Warm Orange */
+    --next-color: #FF9EAA;     /* Soft Pink */
+    --background-color: #FFF5ED; /* Warm Off-white */
     --surface-color: #ffffff;
-    --text-color: #8B4B9F;     /* Deeper Purple */
-    --border-color: #FFD6EC;   /* Light Pink */
-    --hover-color: #FF4BA5;    /* Brighter Pink */
+    --text-color: #695E57;     /* Warm Gray */
+    --border-color: #FFE4D6;   /* Light Peach */
+    --hover-color: #FF7563;    /* Deeper Coral */
+    --shadow-color: rgba(255, 139, 126, 0.2); /* Coral Shadow */
     --transition-speed: 0.3s;
 }
 
 body {
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     background: linear-gradient(
         135deg, 
-        #FFE5F1 0%,
-        #E0F0FF 50%,
-        #F5E6FF 100%
+        #FFE8D6 0%,
+        #FFDFD6 50%,
+        #FFE6E6 100%
     );
     min-height: 100vh;
     margin: 0;
@@ -40,18 +41,21 @@ body {
 }
 
 button {
-    background: var(--primary-color);
+    background: linear-gradient(to bottom right, var(--primary-color), var(--hover-color));
     border-radius: 2rem;
     padding: 0.75rem 2rem;
     color: white;
-    font-weight: bold;
-    box-shadow: none;
+    font-weight: 600;
     border: none;
     transform-style: preserve-3d;
     transition: all 0.3s ease;
     cursor: pointer;
     text-transform: lowercase;
     font-size: 1.2rem;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 12px var(--shadow-color),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {

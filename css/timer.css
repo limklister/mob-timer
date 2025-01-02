@@ -8,21 +8,31 @@
     width: 100%;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+
 #timer {
+    font-family: 'Space Mono', monospace;
     font-size: 8rem;
-    font-weight: bold;
-    color: var(--primary-color);
+    font-weight: 700;
+    color: var(--text-color);
     line-height: 1;
     margin: 1rem 0 2rem;
-    text-shadow: 3px 3px 0px rgba(255, 107, 159, 0.2);
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
+    text-shadow: 
+        4px 4px 0px var(--shadow-color),
+        -1px -1px 0px var(--primary-color);
+    background: linear-gradient(45deg, var(--text-color), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     position: relative;
-    padding: 0.5rem;
-    border: 3px solid var(--primary-color);
+    padding: 1.5rem 2rem;
+    border: none;
     border-radius: 2rem;
     display: inline-block;
+    box-shadow: 
+        0 8px 32px var(--shadow-color),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .timer-controls {
@@ -37,5 +47,5 @@
 }
 
 #showStatsBtn:hover {
-    box-shadow: 0 4px 0 #9656D6;
+    box-shadow: 0 4px 0 var(--hover-color);
 }

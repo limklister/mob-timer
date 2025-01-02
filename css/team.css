@@ -18,6 +18,15 @@
     font-weight: normal;
 }
 
+.team-header button,
+.add-member button {
+    width: 120px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    height: 44px;
+    line-height: 1;
+}
+
 .add-member {
     display: flex;
     gap: 1rem;
@@ -47,13 +56,15 @@
 }
 
 .team-member.current {
-    background: #f0fdf4;
+    background: var(--success-color);
     border-color: var(--success-color);
+    color: white;
 }
 
 .team-member.next {
-    background: #f5f3ff;
+    background: var(--next-color);
     border-color: var(--next-color);
+    color: white;
 }
 
 .team-member-radio {

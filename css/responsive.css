@@ -39,14 +39,32 @@
     button {
         width: 100%;
     }
+
+    .remove-member {
+        width: auto;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+    }
     
-    .click-area {
-        width: 250px;
-        height: 250px;
+    .modal .timer-controls {
+        margin-top: 1rem;
+        gap: 0.75rem;
+    }
+
+    .stats-input-area {
+        max-width: 250px;
+    }
+
+    .coordinate-input {
+        transform: scale(0.9);
     }
     
     .modal-content {
         padding: 1rem;
         max-width: 95%;
+    }
+
+    .modal .btn.close-modal {
+        margin-bottom: 0.75rem;
     }
 }

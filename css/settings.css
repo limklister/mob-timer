@@ -5,24 +5,63 @@
 }
 
 .settings-section h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--text-color);
-    margin: 0 0 1.5rem 0;
-    font-weight: normal;
+    margin: 0 0 1.5rem;
+    font-weight: 600;
 }
 
 .setting {
-    background: linear-gradient(to right, var(--background-color), white);
-    border-radius: 1rem;
-    border: 2px solid var(--border-color);
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.setting:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(5px);
 }
 
 .setting label {
-    font-weight: 500;
+    flex: 1;
+    font-size: 1rem;
     color: var(--text-color);
+}
+
+.setting input[type="number"] {
+    width: 80px;
+    text-align: center;
+    font-size: 1.125rem;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: white;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.setting input[type="number"]:hover {
+    border-color: var(--primary-color);
+}
+
+.setting input[type="number"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--shadow-color);
+    outline: none;
+}
+
+/* Hide number input spinners */
+.setting input[type="number"]::-webkit-inner-spin-button,
+.setting input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.setting input[type="number"] {
+    -moz-appearance: textfield;
 }
