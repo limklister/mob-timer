@@ -100,23 +100,23 @@
           style="display: none"
         >
           <div class="break-timer" id="breakTimer">5:00</div>
-          <button id="startBreakBtn" class="btn">Start Break</button>
-          <button id="continueFromBreakBtn" class="btn" style="display: none">
-            Continue
-          </button>
+          <div class="break-timer-controls">
+            <button id="startBreakBtn" class="btn">start break</button>
+            <button id="continueFromBreakBtn" class="btn">continue</button>
+          </div>
         </div>
         <div class="driver-switch-info">
           <div class="switch-driver current">
-            <div class="driver-label">Current Driver</div>
+            <div class="driver-label">current driver</div>
             <div id="modalCurrentDriver"></div>
           </div>
           <div class="switch-arrow">→</div>
           <div class="switch-driver next">
-            <div class="driver-label">Next Driver</div>
+            <div class="driver-label">next driver</div>
             <div id="modalNextDriver"></div>
           </div>
         </div>
-        <button id="continueBtn">Continue</button>
+        <button id="continueBtn">continue</button>
       </div>
     </div>
 
@@ -160,22 +160,22 @@
         <div class="driver-display">
           <div class="driver-card hidden"></div>
           <div class="driver-card current">
-            <div class="driver-label">Current Driver</div>
+            <div class="driver-label">current driver</div>
             <div class="driver-name" id="currentDriverDisplay">
-              No driver selected
+              no driver selected
             </div>
           </div>
           <div class="driver-card next">
-            <div class="driver-label">Up Next</div>
+            <div class="driver-label">up next</div>
             <div class="driver-name" id="nextDriverDisplay">
-              No driver selected
+              no driver selected
             </div>
           </div>
         </div>
         <div class="timer-controls">
-          <button id="startPauseBtn">Start</button>
-          <button id="resetBtn">Reset</button>
-          <button id="showStatsBtn">Show Stats</button>
+          <button id="startPauseBtn">start</button>
+          <button id="resetBtn">reset</button>
+          <button id="showStatsBtn">show stats</button>
         </div>
       </div>
 
@@ -187,22 +187,22 @@
         <div id="teamList" class="draggable-list"></div>
         <div class="add-member">
           <input type="text" id="memberInput" placeholder="Enter member name" />
-          <button id="addMemberBtn">Add Member</button>
+          <button id="addMemberBtn">add member</button>
         </div>
       </div>
 
       <div class="settings-section">
         <h2>settings</h2>
         <div class="setting">
-          <label for="rotationTime">Rotation Time (minutes)</label>
+          <label for="rotationTime">rotation time (minutes)</label>
           <input type="number" id="rotationTime" value="5" min="1" max="60" />
         </div>
         <div class="setting">
-          <label for="breakFrequency">Break Frequency (rotations)</label>
+          <label for="breakFrequency">break frequency (rotations)</label>
           <input type="number" id="breakFrequency" value="4" min="1" max="10" />
         </div>
         <div class="setting">
-          <label for="breakLength">Break Length (minutes)</label>
+          <label for="breakLength">break length (minutes)</label>
           <input type="number" id="breakLength" value="5" min="1" max="30" />
         </div>
       </div>

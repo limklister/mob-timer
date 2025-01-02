@@ -55,7 +55,6 @@ class TimerCore {
 
   showBreakModal() {
     this.breakModal.style.display = "flex";
-    this.audioManager.playBreakAlert();
   }
 
   async showBreakView() {
@@ -63,19 +62,22 @@ class TimerCore {
     const breakTimerContainer = document.getElementById("breakTimerContainer");
     const continueBtn = document.getElementById("continueBtn");
     const startBreakBtn = document.getElementById("startBreakBtn");
-    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+    const continueFromBreakBtn = document.getElementById(
+      "continueFromBreakBtn"
+    );
 
-    switchModalTitle.textContent = "Time for a Break!";
+    switchModalTitle.textContent = "time for a break!";
     breakTimerContainer.style.display = "block";
     continueBtn.style.display = "none";
-    this.audioManager.playBreakAlert();
   }
 
   hideBreakView() {
     const switchModalTitle = document.getElementById("switchModalTitle");
     const breakTimerContainer = document.getElementById("breakTimerContainer");
     const continueBtn = document.getElementById("continueBtn");
-    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+    const continueFromBreakBtn = document.getElementById(
+      "continueFromBreakBtn"
+    );
 
     switchModalTitle.textContent = "Time's Up!";
     breakTimerContainer.style.display = "none";
@@ -97,7 +99,9 @@ class TimerCore {
   setupEventListeners() {
     this.skipBreakBtn.addEventListener("click", () => this.skipBreak());
     this.startBreakBtn.addEventListener("click", () => this.startBreak());
-    this.breakLengthInput.addEventListener("change", () => this.updateBreakLength());
+    this.breakLengthInput.addEventListener("change", () =>
+      this.updateBreakLength()
+    );
     this.startPauseBtn.addEventListener("click", () => this.toggleTimer());
     this.resetBtn.addEventListener("click", () => this.resetTimer());
     this.rotationTimeInput.addEventListener("change", () =>
@@ -128,8 +132,10 @@ class TimerCore {
 
     if (this.teamManager) {
       const currentDriverIndex = this.teamManager.getCurrentDriverIndex();
-      const nextDriverIndex = (currentDriverIndex + 1) % this.teamManager.getTeamSize();
-      const currentDriver = this.teamManager.getTeamMembers()[currentDriverIndex];
+      const nextDriverIndex =
+        (currentDriverIndex + 1) % this.teamManager.getTeamSize();
+      const currentDriver =
+        this.teamManager.getTeamMembers()[currentDriverIndex];
       const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
       this.showSwitchModal(currentDriver, nextDriver);
     }
@@ -210,8 +216,10 @@ class TimerCore {
     // Continue with the normal timer flow
     if (this.teamManager) {
       const currentDriverIndex = this.teamManager.getCurrentDriverIndex();
-      const nextDriverIndex = (currentDriverIndex + 1) % this.teamManager.getTeamSize();
-      const currentDriver = this.teamManager.getTeamMembers()[currentDriverIndex];
+      const nextDriverIndex =
+        (currentDriverIndex + 1) % this.teamManager.getTeamSize();
+      const currentDriver =
+        this.teamManager.getTeamMembers()[currentDriverIndex];
       const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
       this.showSwitchModal(currentDriver, nextDriver);
     }
@@ -221,12 +229,14 @@ class TimerCore {
     this.isBreak = true;
     this.breakRemaining = this.breakSeconds;
     this.updateBreakTimerDisplay();
-    
+
     const startBreakBtn = document.getElementById("startBreakBtn");
-    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+    const continueFromBreakBtn = document.getElementById(
+      "continueFromBreakBtn"
+    );
     startBreakBtn.style.display = "none";
     continueFromBreakBtn.style.display = "block";
-    
+
     this.timerInterval = setInterval(() => this.updateBreakTimer(), 1000);
 
     // Add event listener for continue button
@@ -244,15 +254,16 @@ class TimerCore {
       clearInterval(this.timerInterval);
       this.isBreak = false;
       this.breakRemaining = this.breakSeconds;
-      this.audioManager.playGentleBeep();
-      this.showStatsModal();
+      this.audioManager.playBreakAlert();
     }
   }
 
   updateBreakTimerDisplay() {
     const minutes = Math.floor(this.breakRemaining / 60);
     const seconds = this.breakRemaining % 60;
-    this.breakTimer.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    this.breakTimer.textContent = `${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 
   updateBreakLength() {

@@ -112,3 +112,50 @@
 .stat-count {
     padding-bottom: 0.75rem;
 }
+
+.break-timer-container {
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .break-timer {
+    font-family: 'Space Mono', monospace;
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1;
+    margin: 1rem 0;
+    text-shadow: 
+        4px 4px 0px var(--shadow-color),
+        -1px -1px 0px var(--primary-color);
+    background: linear-gradient(45deg, var(--text-color), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    padding: 1.5rem 2rem;
+    border: none;
+    border-radius: 2rem;
+    display: inline-block;
+    box-shadow: 
+        0 8px 32px var(--shadow-color),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .break-timer-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 1rem 0 2rem;
+  }
+  
+  .break-timer-controls .btn {
+    min-width: 160px;
+    margin: 0.5rem 0;
+  }
+  
