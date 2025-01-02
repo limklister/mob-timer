@@ -1,0 +1,57 @@
+.driver-display {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    padding: 0;
+    justify-items: center;
+}
+
+.driver-card {
+    border: none;
+    box-shadow: none;
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    text-transform: lowercase;
+    min-width: 200px;
+}
+
+.driver-card .driver-label {
+    font-size: 1rem;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    opacity: 1;
+    font-weight: 500;
+    color: white;
+}
+
+.driver-card .driver-name {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: white;
+    text-transform: lowercase;
+}
+
+.driver-card:hover {
+    transform: none;
+}
+
+.driver-card.current {
+    background: var(--success-color);
+    transform: none;
+}
+
+.driver-card.next {
+    background: var(--next-color);
+    opacity: 1;
+}
+
+.driver-card.hidden {
+    visibility: hidden;
+    pointer-events: none;
+}

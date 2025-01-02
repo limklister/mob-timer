@@ -1,0 +1,78 @@
+.team-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px dashed var(--border-color);
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.team-header h2 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin: 0;
+    font-weight: normal;
+}
+
+.add-member {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.add-member input[type="text"] {
+    flex-grow: 1;
+}
+
+.team-member {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.team-member:hover {
+    border-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.team-member.current {
+    background: #f0fdf4;
+    border-color: var(--success-color);
+}
+
+.team-member.next {
+    background: #f5f3ff;
+    border-color: var(--next-color);
+}
+
+.team-member-radio {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.member-name {
+    font-weight: 500;
+    text-transform: lowercase;
+}
+
+.draggable-list {
+    margin: 1rem 0;
+}
+
+.remove-member {
+    background: var(--hover-color);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}

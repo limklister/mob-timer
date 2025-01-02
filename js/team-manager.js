@@ -1,5 +1,6 @@
 class TeamManager {
     constructor(timerCore) {
+        this.appState = null;
         // DOM Elements
         this.teamList = document.getElementById('teamList');
         this.memberInput = document.getElementById('memberInput');
@@ -16,6 +17,10 @@ class TeamManager {
         // Setup
         this.setupEventListeners();
         this.loadFromURL();
+    }
+
+    setAppState(appState) {
+        this.appState = appState;
     }
 
     setupEventListeners() {
@@ -97,15 +102,6 @@ class TeamManager {
         const radioWrapper = document.createElement('div');
         radioWrapper.classList.add('team-member-radio');
 
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'driver';
-        radio.addEventListener('change', () => {
-            this.currentDriverIndex = this.teamMembers.indexOf(memberName);
-            this.updateDriverDisplays();
-            this.updateURL();
-        });
-
         const nameSpan = document.createElement('span');
         nameSpan.textContent = memberName;
         nameSpan.classList.add('member-name');
@@ -115,7 +111,6 @@ class TeamManager {
         removeBtn.classList.add('remove-member');
         removeBtn.addEventListener('click', () => this.removeMember(memberName));
 
-        radioWrapper.appendChild(radio);
         radioWrapper.appendChild(nameSpan);
 
         memberDiv.appendChild(radioWrapper);
@@ -153,13 +148,11 @@ class TeamManager {
             this.currentDriverDisplay.textContent = currentDriver;
             this.nextDriverDisplay.textContent = nextDriver;
             
-            // Update radio buttons and member list styling
+            // Update member list styling
             const memberElements = this.teamList.querySelectorAll('.team-member');
-            const radioButtons = this.teamList.querySelectorAll('input[type="radio"]');
             
             memberElements.forEach((memberEl, index) => {
                 memberEl.classList.remove('current', 'next');
-                radioButtons[index].checked = (index === this.currentDriverIndex);
                 
                 if (index === this.currentDriverIndex) {
                     memberEl.classList.add('current');

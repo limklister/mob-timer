@@ -1,5 +1,7 @@
 class TimerCore {
-    constructor() {
+    constructor(statsManager, audioManager) {
+        this.audioManager = audioManager;
+        this.appState = null;
         // DOM Elements
         this.timerDisplay = document.getElementById('timer');
         this.startPauseBtn = document.getElementById('startPauseBtn');
@@ -22,32 +24,18 @@ class TimerCore {
         this.breakFrequency = 4;
         this.rotationCount = 0;
         this.teamManager = null;
+        this.statsManager = statsManager;
 
-        // Create oscillator for sound
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            // Timer setup complete
         
         // Setup
         this.setupEventListeners();
         this.loadFromURL();
-        this.hideSwitchModal(); // Hide modal on init
+        this.hideSwitchModal();
     }
 
-    playGentleBeep() {
-        const oscillator = this.audioContext.createOscillator();
-        const gainNode = this.audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(this.audioContext.destination);
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
-        
-        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.1, this.audioContext.currentTime + 0.1);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 1);
-        
-        oscillator.start();
-        oscillator.stop(this.audioContext.currentTime + 1);
+    setAppState(appState) {
+        this.appState = appState;
     }
 
     setTeamManager(teamManager) {
@@ -66,11 +54,54 @@ class TimerCore {
         this.modalCurrentDriver.textContent = currentDriver;
         this.modalNextDriver.textContent = nextDriver;
         this.switchModal.style.display = 'flex';
-        this.playGentleBeep();
+        this.audioManager.playGentleBeep();
     }
 
     hideSwitchModal() {
         this.switchModal.style.display = 'none';
+    }
+
+    showStatsModal(currentDriver, nextDriver) {
+        const statsModal = document.getElementById('statsModal');
+        const clickArea = document.getElementById('clickArea');
+        const clickMarker = document.getElementById('clickMarker');
+        let coordinates = null;
+
+        const handleClick = (e) => {
+            const rect = clickArea.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;  // 0-1 value
+            const y = 1 - (e.clientY - rect.top) / rect.height;  // 0-1 value, inverted for energy
+
+            coordinates = { x, y };
+            
+            // Show marker at click position
+            clickMarker.style.display = 'block';
+            clickMarker.style.left = `${e.clientX - rect.left}px`;
+            clickMarker.style.top = `${e.clientY - rect.top}px`;
+
+            // Record stats and proceed to driver switch after a short delay
+            setTimeout(() => {
+                this.statsManager.recordStat(y, x);
+
+                // Cleanup
+                clickArea.removeEventListener('click', handleClick);
+                statsModal.style.display = 'none';
+                clickMarker.style.display = 'none';
+
+                // Hide modals and switch drivers
+                this.hideSwitchModal();
+                if (this.teamManager) {
+                    this.teamManager.setNextDriver();
+                    this.remainingSeconds = this.totalSeconds;
+                    this.updateTimerDisplay();
+                    this.startTimer();
+                }
+            }, 500);
+        };
+
+        clickArea.addEventListener('click', handleClick);
+        statsModal.style.display = 'flex';
+        clickMarker.style.display = 'none'; // Reset marker
     }
 
     handleDriverSwitch() {
@@ -161,7 +192,6 @@ class TimerCore {
                 alert('Break time!');
             }
 
-            // Stop the timer and show the modal
             this.pauseTimer();
             
             if (this.teamManager) {
@@ -170,7 +200,8 @@ class TimerCore {
                 const currentDriver = this.teamManager.getTeamMembers()[currentDriverIndex];
                 const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
                 
-                this.showSwitchModal(currentDriver, nextDriver);
+                // Show stats modal first, which will then show the switch modal
+                this.showStatsModal(currentDriver, nextDriver);
             }
         }
     }

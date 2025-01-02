@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mob Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/timer.css">
+    <link rel="stylesheet" href="css/drivers.css">
+    <link rel="stylesheet" href="css/team.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
     <div class="cloud-container">
@@ -14,7 +21,7 @@
         <div class="cloud"></div>
     </div>
     
-    <!-- Modal -->
+    <!-- Driver Switch Modal -->
     <div id="switchModal" class="modal">
         <div class="modal-content">
             <h2>Time's Up!</h2>
@@ -30,6 +37,28 @@
                 </div>
             </div>
             <button id="continueBtn">Continue</button>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <h2>Before switching...</h2>
+            <div class="stats-input-area">
+                <div class="coordinate-input" id="coordInput">
+                    <div class="y-axis-label">High Energy</div>
+                    <div class="input-grid">
+                        <div class="x-axis-label">Stuck</div>
+                        <div class="click-area" id="clickArea"></div>
+                        <div class="x-axis-label">Flow</div>
+                    </div>
+                    <div class="y-axis-label">Low Energy</div>
+                </div>
+                <div id="clickMarker" class="click-marker"></div>
+                <div class="input-point-label">
+                    Click where you feel on the grid
+                </div>
+            </div>
         </div>
     </div>
 
@@ -50,6 +79,7 @@
             <div class="timer-controls">
                 <button id="startPauseBtn">Start</button>
                 <button id="resetBtn">Reset</button>
+                <button id="showStatsBtn">Show Stats</button>
             </div>
         </div>
 
@@ -78,8 +108,12 @@
         </div>
     </div>
 
-    <script src="js/timer-core.js"></script>
+    <!-- Load scripts in correct order -->
+    <script src="js/app-state.js"></script>
+    <script src="js/audio-manager.js"></script>
+    <script src="js/stats-manager.js"></script>
     <script src="js/team-manager.js"></script>
+    <script src="js/timer-core.js"></script>
     <script src="js/app-init.js"></script>
 </body>
 </html>
