@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     // Initialize state and managers
     const appState = new AppState();
+    console.log('Initializing audio manager...');
     const audioManager = new AudioManager();
     const statsManager = new StatsManager();
     const timerCore = new TimerCore(statsManager, audioManager);

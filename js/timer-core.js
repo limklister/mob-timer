@@ -8,6 +8,11 @@ class TimerCore {
     this.resetBtn = document.getElementById("resetBtn");
     this.rotationTimeInput = document.getElementById("rotationTime");
     this.breakFrequencyInput = document.getElementById("breakFrequency");
+    this.breakLengthInput = document.getElementById("breakLength");
+    this.breakModal = document.getElementById("breakModal");
+    this.breakTimer = document.getElementById("breakTimer");
+    this.skipBreakBtn = document.getElementById("skipBreakBtn");
+    this.startBreakBtn = document.getElementById("startBreakBtn");
     this.switchModal = document.getElementById("switchModal");
     this.modalCurrentDriver = document.getElementById("modalCurrentDriver");
     this.modalNextDriver = document.getElementById("modalNextDriver");
@@ -18,6 +23,9 @@ class TimerCore {
     this.remainingSeconds = this.totalSeconds;
     this.timerInterval = null;
     this.isRunning = false;
+    this.isBreak = false;
+    this.breakSeconds = 5 * 60;
+    this.breakRemaining = this.breakSeconds;
 
     // Settings
     this.rotationTime = 5;
@@ -28,6 +36,7 @@ class TimerCore {
 
     // Setup
     this.setupEventListeners();
+    this.hideBreakModal();
     this.loadFromURL();
     this.hideSwitchModal();
   }
@@ -40,7 +49,55 @@ class TimerCore {
     this.teamManager = teamManager;
   }
 
+  hideBreakModal() {
+    this.breakModal.style.display = "none";
+  }
+
+  showBreakModal() {
+    this.breakModal.style.display = "flex";
+    this.audioManager.playBreakAlert();
+  }
+
+  async showBreakView() {
+    const switchModalTitle = document.getElementById("switchModalTitle");
+    const breakTimerContainer = document.getElementById("breakTimerContainer");
+    const continueBtn = document.getElementById("continueBtn");
+    const startBreakBtn = document.getElementById("startBreakBtn");
+    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+
+    switchModalTitle.textContent = "Time for a Break!";
+    breakTimerContainer.style.display = "block";
+    continueBtn.style.display = "none";
+    this.audioManager.playBreakAlert();
+  }
+
+  hideBreakView() {
+    const switchModalTitle = document.getElementById("switchModalTitle");
+    const breakTimerContainer = document.getElementById("breakTimerContainer");
+    const continueBtn = document.getElementById("continueBtn");
+    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+
+    switchModalTitle.textContent = "Time's Up!";
+    breakTimerContainer.style.display = "none";
+    continueBtn.style.display = "block";
+    continueFromBreakBtn.style.display = "none";
+  }
+
+  completeRotation() {
+    this.hideBreakView();
+    this.hideSwitchModal();
+    if (this.teamManager) {
+      this.teamManager.setNextDriver();
+      this.remainingSeconds = this.totalSeconds;
+      this.updateTimerDisplay();
+      this.startTimer();
+    }
+  }
+
   setupEventListeners() {
+    this.skipBreakBtn.addEventListener("click", () => this.skipBreak());
+    this.startBreakBtn.addEventListener("click", () => this.startBreak());
+    this.breakLengthInput.addEventListener("change", () => this.updateBreakLength());
     this.startPauseBtn.addEventListener("click", () => this.toggleTimer());
     this.resetBtn.addEventListener("click", () => this.resetTimer());
     this.rotationTimeInput.addEventListener("change", () =>
@@ -52,11 +109,11 @@ class TimerCore {
     this.continueBtn.addEventListener("click", () => this.handleDriverSwitch());
   }
 
-  showSwitchModal(currentDriver, nextDriver) {
+  async showSwitchModal(currentDriver, nextDriver) {
     this.modalCurrentDriver.textContent = currentDriver;
     this.modalNextDriver.textContent = nextDriver;
     this.switchModal.style.display = "flex";
-    this.audioManager.playGentleBeep();
+    await this.audioManager.playGentleBeep();
   }
 
   hideSwitchModal() {
@@ -68,6 +125,14 @@ class TimerCore {
     const clickArea = document.getElementById("clickArea");
     const clickMarker = document.getElementById("clickMarker");
     let coordinates = null;
+
+    if (this.teamManager) {
+      const currentDriverIndex = this.teamManager.getCurrentDriverIndex();
+      const nextDriverIndex = (currentDriverIndex + 1) % this.teamManager.getTeamSize();
+      const currentDriver = this.teamManager.getTeamMembers()[currentDriverIndex];
+      const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
+      this.showSwitchModal(currentDriver, nextDriver);
+    }
 
     const handleClick = (e) => {
       console.log("Click event:", {
@@ -109,13 +174,11 @@ class TimerCore {
         statsModal.style.display = "none";
         clickMarker.style.display = "none";
 
-        // Hide modals and switch drivers
-        this.hideSwitchModal();
-        if (this.teamManager) {
-          this.teamManager.setNextDriver();
-          this.remainingSeconds = this.totalSeconds;
-          this.updateTimerDisplay();
-          this.startTimer();
+        // After recording stats
+        if (this.shouldStartBreak) {
+          this.showBreakView();
+        } else {
+          this.completeRotation();
         }
       }, 1000);
     };
@@ -139,10 +202,71 @@ class TimerCore {
     this.startTimer();
   }
 
+  skipBreak() {
+    this.hideBreakModal();
+    this.isBreak = false;
+    this.breakRemaining = this.breakSeconds;
+    this.updateBreakTimerDisplay();
+    // Continue with the normal timer flow
+    if (this.teamManager) {
+      const currentDriverIndex = this.teamManager.getCurrentDriverIndex();
+      const nextDriverIndex = (currentDriverIndex + 1) % this.teamManager.getTeamSize();
+      const currentDriver = this.teamManager.getTeamMembers()[currentDriverIndex];
+      const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
+      this.showSwitchModal(currentDriver, nextDriver);
+    }
+  }
+
+  startBreak() {
+    this.isBreak = true;
+    this.breakRemaining = this.breakSeconds;
+    this.updateBreakTimerDisplay();
+    
+    const startBreakBtn = document.getElementById("startBreakBtn");
+    const continueFromBreakBtn = document.getElementById("continueFromBreakBtn");
+    startBreakBtn.style.display = "none";
+    continueFromBreakBtn.style.display = "block";
+    
+    this.timerInterval = setInterval(() => this.updateBreakTimer(), 1000);
+
+    // Add event listener for continue button
+    continueFromBreakBtn.onclick = () => {
+      clearInterval(this.timerInterval);
+      this.completeRotation();
+    };
+  }
+
+  updateBreakTimer() {
+    if (this.breakRemaining > 0) {
+      this.breakRemaining--;
+      this.updateBreakTimerDisplay();
+    } else {
+      clearInterval(this.timerInterval);
+      this.isBreak = false;
+      this.breakRemaining = this.breakSeconds;
+      this.audioManager.playGentleBeep();
+      this.showStatsModal();
+    }
+  }
+
+  updateBreakTimerDisplay() {
+    const minutes = Math.floor(this.breakRemaining / 60);
+    const seconds = this.breakRemaining % 60;
+    this.breakTimer.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  updateBreakLength() {
+    this.breakSeconds = parseInt(this.breakLengthInput.value) * 60;
+    this.breakRemaining = this.breakSeconds;
+    this.updateBreakTimerDisplay();
+    this.updateURL();
+  }
+
   loadFromURL() {
     const params = new URLSearchParams(window.location.search);
     const time = params.get("time");
     const breaks = params.get("breaks");
+    const breakLength = params.get("breakLength");
 
     if (time) {
       this.rotationTimeInput.value = time;
@@ -153,12 +277,18 @@ class TimerCore {
       this.breakFrequencyInput.value = breaks;
       this.updateBreakFrequency();
     }
+
+    if (breakLength) {
+      this.breakLengthInput.value = breakLength;
+      this.updateBreakLength();
+    }
   }
 
   updateURL() {
     const params = new URLSearchParams(window.location.search);
     params.set("time", this.rotationTime);
     params.set("breaks", this.breakFrequency);
+    params.set("breakLength", parseInt(this.breakLengthInput.value));
     const newURL = `${window.location.pathname}?${params.toString()}`;
     window.history.replaceState({}, "", newURL);
   }
@@ -208,22 +338,11 @@ class TimerCore {
       this.updateTimerDisplay();
     } else {
       this.rotationCount++;
-
-      if (this.rotationCount % this.breakFrequency === 0) {
-        alert("Break time!");
-      }
-
       this.pauseTimer();
 
       if (this.teamManager) {
-        const currentDriverIndex = this.teamManager.getCurrentDriverIndex();
-        const nextDriverIndex =
-          (currentDriverIndex + 1) % this.teamManager.getTeamSize();
-        const currentDriver =
-          this.teamManager.getTeamMembers()[currentDriverIndex];
-        const nextDriver = this.teamManager.getTeamMembers()[nextDriverIndex];
-
-        // Show stats modal first, which will then show the switch modal
+        // Always show stats modal first
+        this.shouldStartBreak = this.rotationCount % this.breakFrequency === 0;
         this.showStatsModal();
       }
     }

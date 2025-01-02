@@ -1,3 +1,72 @@
+<!-- Stats Visualization Modal -->
+<div id="statsVisualizationModal" class="modal">
+  <div
+    class="modal-content stats-visualization"
+    style="width: min(70vw, 1000px); height: min(50vh, 400px)"
+  >
+    <h2>Stats Timeline</h2>
+    <div class="visualization-container"></div>
+    <div id="statCount" class="stat-count"></div>
+    <div class="modal-actions">
+      <button class="btn close-modal">Close</button>
+      <button class="btn btn-danger clear-stats">Clear Stats</button>
+    </div>
+
+    <!-- Stats Visualization Modal -->
+    <div id="statsVisualizationModal" class="modal">
+      <div
+        class="modal-content stats-visualization"
+        style="width: min(70vw, 1000px); height: min(50vh, 400px)"
+      >
+        <h2>Stats Timeline</h2>
+        <div class="visualization-container"></div>
+        <div id="statCount" class="stat-count"></div>
+        <div class="modal-actions">
+          <button class="btn close-modal">Close</button>
+          <button class="btn btn-danger clear-stats">Clear Stats</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal">
+      <div class="modal-content error-modal">
+        <div id="errorMessage" class="error-message"></div>
+        <button class="btn close-modal">ok</button>
+      </div>
+    </div>
+
+    <!-- Confirm Clear Modal -->
+    <div id="confirmClearModal" class="modal">
+      <div class="modal-content confirm-modal">
+        <div class="confirm-message">clear all stats?</div>
+        <div class="modal-actions">
+          <button class="btn close-modal">cancel</button>
+          <button class="btn btn-danger confirm-clear">clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="modal">
+  <div class="modal-content error-modal">
+    <div id="errorMessage" class="error-message"></div>
+    <button class="btn close-modal">ok</button>
+  </div>
+</div>
+
+<!-- Confirm Clear Modal -->
+<div id="confirmClearModal" class="modal">
+  <div class="modal-content confirm-modal">
+    <div class="confirm-message">clear all stats?</div>
+    <div class="modal-actions">
+      <button class="btn close-modal">cancel</button>
+      <button class="btn btn-danger confirm-clear">clear</button>
+    </div>
+  </div>
+</div>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,7 +93,18 @@
     <!-- Driver Switch Modal -->
     <div id="switchModal" class="modal">
       <div class="modal-content">
-        <h2>Time's Up!</h2>
+        <h2 id="switchModalTitle">Time's Up!</h2>
+        <div
+          id="breakTimerContainer"
+          class="break-timer-container"
+          style="display: none"
+        >
+          <div class="break-timer" id="breakTimer">5:00</div>
+          <button id="startBreakBtn" class="btn">Start Break</button>
+          <button id="continueFromBreakBtn" class="btn" style="display: none">
+            Continue
+          </button>
+        </div>
         <div class="driver-switch-info">
           <div class="switch-driver current">
             <div class="driver-label">Current Driver</div>
@@ -37,6 +117,18 @@
           </div>
         </div>
         <button id="continueBtn">Continue</button>
+      </div>
+    </div>
+
+    <!-- Break Modal -->
+    <div id="breakModal" class="modal">
+      <div class="modal-content">
+        <h2>Break Time!</h2>
+        <div class="break-timer" id="breakTimer">5:00</div>
+        <div class="break-controls">
+          <button id="skipBreakBtn" class="btn">Skip Break</button>
+          <button id="startBreakBtn" class="btn">Start Break</button>
+        </div>
       </div>
     </div>
 
@@ -64,7 +156,7 @@
 
     <div class="container">
       <div class="timer-section">
-        <div id="timer">25:00</div>
+        <div id="timer">5:00</div>
         <div class="driver-display">
           <div class="driver-card hidden"></div>
           <div class="driver-card current">
@@ -89,7 +181,7 @@
 
       <div class="team-section">
         <div class="team-header">
-          <h2>Team Members</h2>
+          <h2>team members</h2>
           <button id="shuffleBtn">shuffle</button>
         </div>
         <div id="teamList" class="draggable-list"></div>
@@ -100,7 +192,7 @@
       </div>
 
       <div class="settings-section">
-        <h2>Settings</h2>
+        <h2>settings</h2>
         <div class="setting">
           <label for="rotationTime">Rotation Time (minutes)</label>
           <input type="number" id="rotationTime" value="5" min="1" max="60" />
@@ -109,12 +201,17 @@
           <label for="breakFrequency">Break Frequency (rotations)</label>
           <input type="number" id="breakFrequency" value="4" min="1" max="10" />
         </div>
+        <div class="setting">
+          <label for="breakLength">Break Length (minutes)</label>
+          <input type="number" id="breakLength" value="5" min="1" max="30" />
+        </div>
       </div>
     </div>
 
     <!-- Load scripts in correct order -->
     <script src="js/app-state.js"></script>
     <script src="js/audio-manager.js"></script>
+    <script src="js/stats-chart.js"></script>
     <script src="js/stats-manager.js"></script>
     <script src="js/team-manager.js"></script>
     <script src="js/timer-core.js"></script>
